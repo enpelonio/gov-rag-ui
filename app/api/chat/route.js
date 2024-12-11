@@ -4,6 +4,9 @@ import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import Conversation from "@/models/Conversation";
 import { connectToDB } from "@/utils/database";
+const mongoose = require('mongoose');
+
+export const maxDuration = 60;
 
 export const POST = async (req) => {
   const { query, conversationId } = await req.json();
