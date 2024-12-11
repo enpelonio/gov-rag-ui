@@ -15,7 +15,7 @@ export default function ChatInterface() {
   useEffect(() => {
     // request a conversation id to backend
     async function fetchConversationId() {
-      let response = await fetch("api/chat");
+      const response = await fetch("api/chat");
       const jsonResponse = await response.json();
       setConversationId(jsonResponse.conversationId);
     }
