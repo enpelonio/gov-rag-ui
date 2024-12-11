@@ -4,14 +4,16 @@ import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import Conversation from "@/models/Conversation";
 import { connectToDB } from "@/utils/database";
+import Redis from "ioredis"
 
 export const maxDuration = 60;
 
 export const POST = async (req) => {
   const { query, conversationId } = await req.json();
+
   const pinecone = new PineconeClient();
   // Will automatically read the PINECONE_API_KEY and PINECONE_ENVIRONMENT env vars
-  const pineconeIndex = pinecone.Index("government-rag-index");
+  const pineconeIndex = pinecone.Index("government-rag-summaries");
   const embeddings = new GoogleGenerativeAIEmbeddings({
     modelName: "models/text-embedding-004", // 768 dimensions,
     apiKey: process.env.GOOGLE_API_KEY,
@@ -35,8 +37,7 @@ export const POST = async (req) => {
     context: "",
     answer: "",
   };
-
-  console.log("Prompt JSON: ", promptJson);
+  // console.log("Prompt JSON: ", promptJson);
   const promptPreText =
     "You are an assistant tasked to explain to common folk \
     a number of government processes and answer inquiries. \
@@ -51,7 +52,7 @@ export const POST = async (req) => {
     that means you have already queried the database, and must use the information \
     inside to formulate an answer. Put your answer in the answer attribute. \
     Remove the previous_conversations and context variables in the output. Output in json format with the same variables as the input \
-    Always answer in a courteous manner in the language \
+    Always answer in a courteous manner in the same language \
     of the user_query. The answer attribute must be comprehensive and with markdown annotation.";
 
   let promptTemplate =
@@ -59,8 +60,8 @@ export const POST = async (req) => {
   // send prompt to model
 
   let reply = await model.invoke(promptTemplate);
-  console.log("Prompt Template: ", promptTemplate);
-  console.log("First Reply: ", reply.content);
+  // console.log("Prompt Template: ", promptTemplate);
+  // console.log("First Reply: ", reply.content);
   let cleanedString = reply.content.match(/{.*}/s);
   let replyJson = JSON.parse(cleanedString[0]);
 
@@ -71,10 +72,38 @@ export const POST = async (req) => {
       10
     );
     let context = "";
+    const doc_ids = []
     for (let i = 0; i < similaritySearchResults.length; i++) {
       const result = similaritySearchResults[i];
-      context += result.pageContent + "\n";
+      // console.log(result);
+      //context += result.pageContent + "\n";
+      doc_ids.push(result.metadata.doc_id)
     }
+    // console.log('DOC IDs: ', doc_ids)
+    const redis = new Redis(process.env.REDIS_URI);
+    const values = await redis.mget(doc_ids);
+    
+    const result = values.map((base64Value, index) => {
+      if (base64Value) {
+        try {
+          // Decode Base64 and parse JSON
+          const decodedValue = Buffer.from(base64Value, 'base64').toString('utf-8');
+          return JSON.parse(decodedValue);
+        } catch (error) {
+          console.error(`Error parsing value for key ${keys[index]}:`, error);
+          return null; // Or handle invalid JSON/base64 as needed
+        }
+      }
+      return null; // Key does not exist or has no value
+    });
+    result.forEach((item, index) => {
+      if (item?.kwargs?.page_content) {
+        context += item.kwargs.page_content;
+      } else {
+        console.warn(`No page_content found for key${index + 1}`);
+      }
+    });
+
     // send the context to gemini after query
     replyJson.context = context;
     promptTemplate =
@@ -88,6 +117,7 @@ export const POST = async (req) => {
     console.log("Second Reply: ", replyJson);
   }
   const answer = replyJson.answer;
+
   console.log("Answer: ", answer);
   // insert messages to conversation
   await Conversation.findByIdAndUpdate(conversationId, {
