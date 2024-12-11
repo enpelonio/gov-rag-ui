@@ -88,7 +88,7 @@ export const POST = async (req) => {
   const answer = replyJson.answer;
   console.log("Answer: ", answer);
   // insert messages to conversation
-  const updatedChat = await Conversation.findByIdAndUpdate(conversationId, {
+  await Conversation.findByIdAndUpdate(conversationId, {
     $push: {
       messages: {
         $each: [
@@ -110,7 +110,7 @@ export const POST = async (req) => {
   });
 };
 
-export const GET = async (req) => {
+export const GET = async () => {
   try {
     // Ensure the database connection
     await connectToDB();

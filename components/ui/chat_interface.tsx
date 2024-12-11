@@ -16,8 +16,8 @@ export default function ChatInterface() {
     // request a conversation id to backend
     async function fetchConversationId() {
       let response = await fetch("api/chat");
-      response = await response.json();
-      setConversationId(response.conversationId);
+      const jsonResponse = await response.json();
+      setConversationId(jsonResponse.conversationId);
     }
     fetchConversationId();
   }, []);
@@ -75,7 +75,7 @@ export default function ChatInterface() {
                 msg.type === "sent" ? "bg-blue-500 text-white" : "bg-white"
               }`}
             >
-              <Markdown children={msg.text} />
+              <Markdown>{msg.text}</Markdown>
             </div>
           </div>
         ))}
