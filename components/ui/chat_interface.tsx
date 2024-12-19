@@ -15,7 +15,7 @@ export type ChatMessage = {
 };
 type ChatInterfaceProps = {
   messages: ChatMessage[];
-  handleSend: (message: any) => Promise<void>;
+  handleSend: (message: string) => Promise<void>;
   isLoading: boolean;
 };
 
@@ -27,15 +27,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [message, setMessage] = useState("");
   const sendButtonRef = useRef(null);
   const chatContainerRef = useRef(null);
-  const handleKeyPress = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendButtonRef.current?.click();
-      }
-    },
-    [handleSend]
-  );
+  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendButtonRef.current?.click();
+    }
+  }, []);
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -56,7 +53,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           <div className="overflow-y-auto w-full h-full" ref={chatContainerRef}>
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((msg, index) => (
-                <ChatMessageElement message={msg} />
+                <ChatMessageElement message={msg} key={index} />
               ))}
               {isLoading && <ThinkingPlaceholder />}
             </div>

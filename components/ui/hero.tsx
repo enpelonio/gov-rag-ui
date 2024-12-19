@@ -9,21 +9,18 @@ import { useState, useRef, useCallback } from "react";
 
 type HeroProps = {
   isLoading: boolean;
-  handleSend: (message: any) => Promise<void>;
+  handleSend: (message: string) => Promise<void>;
 };
 
 const Hero: React.FC<HeroProps> = ({ isLoading, handleSend }) => {
   const [message, setMessage] = useState("");
   const sendButtonRef = useRef(null);
-  const handleKeyPress = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendButtonRef.current?.click();
-      }
-    },
-    [handleSend]
-  );
+  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendButtonRef.current?.click();
+    }
+  }, []);
   const segments = [
     {
       text: "Juander Bot ",
