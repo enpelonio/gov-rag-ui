@@ -4,9 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 import Markdown from "react-markdown";
-import { LoadingAnimation } from "./loading_animation";
-import { Logo } from "./logo";
-import { NavBar } from "./navbar";
+// import { LoadingAnimation } from "./loading_animation";
+// import { Logo } from "./logo";
+// import { NavBar } from "./navbar";
 
 export default function ChatInterface() {
   const [conversationId, setConversationId] = useState("");

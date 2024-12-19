@@ -19,7 +19,7 @@ export function TypingParagraph({ segments, speed = 50, className = '', as: Comp
 
   return (
     <Component className={`typing-paragraph ${className}`}>
-      {displayedSegments.map((segment:any, index:any) => (
+      {displayedSegments.map((segment:TextSegment, index) => (
         <span key={index} className={segment.className}>
           {segment.text}
         </span>

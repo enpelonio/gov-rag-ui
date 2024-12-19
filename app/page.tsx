@@ -1,4 +1,4 @@
-import ChatInterface from "@/components/ui/chat_interface";
+// import ChatInterface from "@/components/ui/chat_interface";
 import Hero from "@/components/ui/hero";
 import { NavBar } from "@/components/ui/navbar";
 
