@@ -27,7 +27,7 @@ const Hero: React.FC<HeroProps> = ({ isLoading, handleSend }) => {
       className: "font-bold tracking-tight text-2xl lg:text-3xl",
     },
     {
-      text: "is an AI chatbot that can answer questions related to the Citizen's Charter of PhilHealth, SSS, GSIS, BIR, DFA and LTO ",
+      text: "is an AI chatbot that can answer questions related to the Citizen's Charter of PhilHealth, SSS, GSIS, BIR, DFA and LTO. ",
       className: "text-xl lg:text-2xl",
     },
     {
