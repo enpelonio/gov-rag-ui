@@ -27,7 +27,7 @@ const Hero: React.FC<HeroProps> = ({ isLoading, handleSend }) => {
       className: "font-bold tracking-tight text-2xl lg:text-3xl",
     },
     {
-      text: "is an AI chatbot that can answer questions related to the Citizen's Charter of PhilHealth, SSS, GSIS, BIR and DFA ",
+      text: "is an AI chatbot that can answer questions related to the Citizen's Charter of PhilHealth, SSS, GSIS, BIR, DFA and LTO ",
       className: "text-xl lg:text-2xl",
     },
     {
@@ -36,7 +36,7 @@ const Hero: React.FC<HeroProps> = ({ isLoading, handleSend }) => {
     },
   ];
   return (
-    <div className="flex flex-col w-[50%] gap-">
+    <div className="flex flex-col w-full p-4 lg:w-1/2">
       <div className="flex flex-col md:flex-row justify-center items-center">
         <Image
           src={"/images/JuanderBot Logo.png"}

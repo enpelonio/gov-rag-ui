@@ -90,8 +90,9 @@ export const POST = async (req) => {
           const decodedValue = Buffer.from(base64Value, 'base64').toString('utf-8');
           return JSON.parse(decodedValue);
         } catch (error) {
-          console.error(`Error parsing value for key ${keys[index]}:`, error);
-          return null; // Or handle invalid JSON/base64 as needed
+          // console.error(`Error parsing value for key ${values[index]}:`, error);
+          // this means there is no need to decode
+          return JSON.parse(base64Value); // Or handle invalid JSON/base64 as needed
         }
       }
       return null; // Key does not exist or has no value
