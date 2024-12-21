@@ -83,7 +83,7 @@ export const POST = async (req) => {
     const redis = new Redis(process.env.REDIS_URI);
     const values = await redis.mget(doc_ids);
     
-    const result = values.map((base64Value) => {
+    const result = values.map((base64Value, index) => {
       if (base64Value) {
         try {
           // Decode Base64 and parse JSON
