@@ -1,17 +1,15 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 import { ChatMessageElement } from "./chat_message";
 import ThinkingPlaceholder from "./thinking_placeholder";
-// import { LoadingAnimation } from "./loading_animation";
-// import { Logo } from "./logo";
-// import { NavBar } from "./navbar";
+import { Textarea } from "@/components/ui/textarea";
 
 export type ChatMessage = {
   text: string;
   type: string;
+  sources: Array<string>;
 };
 type ChatInterfaceProps = {
   messages: ChatMessage[];
@@ -63,8 +61,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       {/* Input area */}
       <div className="border-t bg-white p-4">
         <div className="flex items-center space-x-2">
-          <Input
-            type="text"
+          <Textarea
             placeholder="Ask me anything..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}

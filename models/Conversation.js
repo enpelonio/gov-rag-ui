@@ -6,6 +6,7 @@ const { Schema } = mongoose;
 const messageSchema = new Schema({
   from: { type: String, required: true },
   message: { type: String, required: true },
+  sources: {type: Array, required: false},
   timestamp: {
     type: Date,
     default: () => moment.tz(Date.now(), "Asia/Manila").toDate(),

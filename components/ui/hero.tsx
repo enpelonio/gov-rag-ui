@@ -6,6 +6,7 @@ import { Button } from "./button";
 import { Send } from "lucide-react";
 import { TypingParagraph } from "./typing_paragraph";
 import { useState, useRef, useCallback } from "react";
+import { Textarea } from "@/components/ui/textarea";
 
 type HeroProps = {
   isLoading: boolean;
@@ -53,8 +54,7 @@ const Hero: React.FC<HeroProps> = ({ isLoading, handleSend }) => {
       </div>
       <div className=" bg-white p-4">
         <div className="flex items-center space-x-2">
-          <Input
-            type="text"
+          <Textarea
             placeholder="Ask me anything..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}

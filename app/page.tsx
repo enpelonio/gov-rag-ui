@@ -16,7 +16,7 @@ export default function Home() {
     if (!message.trim()) return; // Prevent sending empty messages
 
     // Add the user's message to the chat UI
-    const userMessage = { text: message, type: "sent" };
+    const userMessage = { text: message, type: "sent", sources: [] };
     if (messages.length === 0) isFirstMessage = true;
     setMessages((prev) => [...prev, userMessage]);
     if (isFirstMessage) setUseHero(false);
@@ -41,7 +41,12 @@ export default function Home() {
       const data = await response.json();
       setUseHero(false);
       // Append the reply from the server
-      const replyMessage = { text: data.reply, type: "received" };
+      const replyMessage = {
+        text: data.reply,
+        type: "received",
+        sources: data.sources,
+      };
+      console.log("This is the reply: ", replyMessage);
       setMessages((prev) => [...prev, replyMessage]);
       setIsLoading(false);
     } catch (error) {
