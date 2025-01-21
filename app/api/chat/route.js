@@ -76,7 +76,8 @@ export const POST = async (req) => {
   try {
     replyJson = JSON.parse(cleanedString[0]);  
   } catch (error) {
-    console.log("1st Cleaned string: ", cleanedString);  
+    console.log("1st Cleaned string: ", cleanedString);
+    console.log("Error: ", error); 
   }
   // if answer is empty, query pinecone using query_question
   const sources = []
@@ -100,14 +101,14 @@ export const POST = async (req) => {
     const redis = new Redis(process.env.REDIS_URI);
     const values = await redis.mget(doc_ids);
     
-    const result = values.map((base64Value, index) => {
+    const result = values.map((base64Value) => {
       if (base64Value) {
         try {
           // Decode Base64 and parse JSON
           const decodedValue = Buffer.from(base64Value, 'base64').toString('utf-8');
           return JSON.parse(decodedValue);
         } catch (error) {
-          // console.log(`Cannot decode ${values[index]}:`, error);
+          console.log(`Cannot decode ${values[index]}:`, error);
           // this means there is no need to decode
           return JSON.parse(base64Value); // Or handle invalid JSON/base64 as needed
         }

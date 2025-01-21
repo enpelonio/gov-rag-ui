@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { Input } from "./input";
 import { Button } from "./button";
 import { Send } from "lucide-react";
 import { TypingParagraph } from "./typing_paragraph";
